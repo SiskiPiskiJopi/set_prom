@@ -1,8 +1,58 @@
-# evaluate the base gpt2
-# n_layer=48, n_head=25, n_embd=1600
-# 1558M parameters
-batch_size = 8
-eval_iters = 500 # use more iterations to get good estimate
-eval_only = True
-wandb_log = False
-init_from = 'gpt2-xl'
+import time
+import ccxt
+from termcolor import cprint
+from web3 import Web3
+import random
+from decimal import Decimal
+
+#проверяем РПЦ и чекаем баланс кошельков в ETH и его стоимость в USDC
+
+def get_eth_usdc_price():
+    exchange = ccxt.binance()  # Используем биржу Binance для получения курса
+    market = exchange.load_markets()
+    ticker = exchange.fetch_ticker('ETH/USDC')
+    return ticker['last']  # Возвращает последнюю цену ETH/USDC
+
+def check_balance(address, number, web3, eth_usdc_price):
+    try:
+        balance = web3.eth.get_balance(web3.toChecksumAddress(address))
+        humanReadable = web3.fromWei(balance, 'ether')
+        humanReadable_decimal = Decimal(str(humanReadable))  # Преобразование в Decimal
+        usd_balance = humanReadable_decimal * Decimal(eth_usdc_price)  # Умножение Decimal на Decimal
+        cprint(f'{number}. {address} : {humanReadable} ETH / {usd_balance:.2f} USDC', 'white')
+        return humanReadable_decimal
+
+    except Exception as error:
+        cprint(f'{number}. {address} = {error}', 'red')
+        return Decimal(0)
+
+if __name__ == "__main__":
+    
+    with open("wallets.txt", "r") as f:
+        wallets_list = [row.strip() for row in f]
+
+    # RPC = 'https://mainnet.optimism.io'
+    # RPC = 'https://bsc-dataseed.binance.org'
+    # RPC = 'https://polygon-rpc.com'
+    # RPC = 'https://arb1.arbitrum.io/rpc'
+    # RPC = 'https://rpc.ankr.com/eth'
+    RPC = 'https://1rpc.io/zksync2-era'
+    # RPC = 'https://1rpc.io/linea'
+    # RPC = 'https://base.llamarpc.com'
+    # RPC = 'https://1rpc.io/scroll'
+    
+    web3 = Web3(Web3.HTTPProvider(RPC))
+    total_eth_balance = Decimal(0)
+    eth_usdc_price = get_eth_usdc_price()  # Получаем текущий курс ETH/USDC
+
+    cprint('\a\n/// start check balance...', 'white')
+    number = 0
+    for wallet in wallets_list:
+        address = web3.toChecksumAddress(wallet)
+        number = number + 1
+        balance = check_balance(address, number, web3, eth_usdc_price)  # Проверяем баланс и получаем его в ETH
+        total_eth_balance += balance
+        
+
+    cprint(f'\a\n/// Проверка завершена. Итоговый баланс всех кошельков: {total_eth_balance} ETH', 'green')
+
