@@ -5,7 +5,7 @@ from web3 import Web3
 import random
 from decimal import Decimal
 
-#проверяем РПЦ и чекаем баланс кошельков в ETH и его стоимость в USDC
+#проверяем РПЦ и проверяем баланс кошельков в ETH и его стоимость в USDC
 
 def get_eth_usdc_price():
     exchange = ccxt.binance()  # Используем биржу Binance для получения курса
@@ -18,7 +18,7 @@ def check_balance(address, number, web3, eth_usdc_price):
         balance = web3.eth.get_balance(web3.toChecksumAddress(address))
         humanReadable = web3.fromWei(balance, 'ether')
         humanReadable_decimal = Decimal(str(humanReadable))  # Преобразование в Decimal
-        usd_balance = humanReadable_decimal * Decimal(eth_usdc_price)  # Умножение Decimal на Decimal
+        usd_balance = humanReadable_decimal * Decimal(eth_usdc_price)  
         cprint(f'{number}. {address} : {humanReadable} ETH / {usd_balance:.2f} USDC', 'white')
         return humanReadable_decimal
 
