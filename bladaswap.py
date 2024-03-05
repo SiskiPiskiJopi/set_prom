@@ -21,6 +21,8 @@ def check_balance(address, number, web3, eth_usdc_price):
         humanReadable = web3.fromWei(balance, 'ether')
         humanReadable_decimal = Decimal(str(humanReadable))# Преобразование в Decimal
         usd_balance = humanReadable_decimal * Decimal(eth_usdc_price)  
+        umanReadable_decimal = Decimal(str(humanReadable))  
+        humanReadable = web3.fromWei(balance, 'ether')
         cprint(f'{number}. {address} : {humanReadable} ETH / {usd_balance:.2f} USDC', 'white')
         return humanReadable_decimal
 
