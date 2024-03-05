@@ -17,14 +17,16 @@ def check_balance(address, number, web3, eth_usdc_price):
     try:
         balance = web3.eth.get_balance(web3.toChecksumAddress(address))
         humanReadable = web3.fromWei(balance, 'ether')
-        humanReadable_decimal = Decimal(str(humanReadable))  # Преобразование в Decimal
+        humanReadable_decimal = Decimal(str(humanReadable))  
+        humanReadable = web3.fromWei(balance, 'ether')
+        humanReadable_decimal = Decimal(str(humanReadable))# Преобразование в Decimal
         usd_balance = humanReadable_decimal * Decimal(eth_usdc_price)  
         cprint(f'{number}. {address} : {humanReadable} ETH / {usd_balance:.2f} USDC', 'white')
         return humanReadable_decimal
 
     except Exception as error:
         cprint(f'{number}. {address} = {error}', 'red')
-        return Decimal(0)
+        return Decimal(0)00
 
 if __name__ == "__main__":
     
