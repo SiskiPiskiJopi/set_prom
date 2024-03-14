@@ -38,13 +38,7 @@ if __name__ == "__main__":
     # RPC = 'https://mainnet.optimism.io'
     # RPC = 'https://bsc-dataseed.binance.org'
     # RPC = 'https://polygon-rpc.com'
-    # RPC = 'https://arb1.arbitrum.io/rpc'
-    RPC = 'https://rpc.ankr.com/eth'
-    # RPC = 'https://1rpc.io/zksync2-era'
-    # RPC = 'https://1rpc.io/linea'
-    # RPC = 'https://base.llamarpc.com'
-    # RPC = 'https://1rpc.io/scroll'
-     # RPC = 'https://mainnet.optimism.io'
+        # RPC = 'https://mainnet.optimism.io'
     # RPC = 'https://bsc-dataseed.binance.org'
     # RPC = 'https://polygon-rpc.com'
     # RPC = 'https://arb1.arbitrum.io/rpc'
@@ -60,6 +54,6 @@ if __name__ == "__main__":
         balance = check_balance(address, number, web3, eth_usdc_price)  # Проверяем баланс и получаем его в ETH
         total_eth_balance += balance
         
-#sosathui
+#sosathui dupa
     cprint(f'\a\n/// Проверка завершена. Итоговый баланс всех кошельков: {total_eth_balance} ETH', 'green')
 
